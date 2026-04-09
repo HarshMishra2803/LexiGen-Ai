@@ -4,9 +4,6 @@ import { MessageSquare, X, Send, Bot, User, Loader2, Minimize2, Maximize2 } from
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { ScrollArea } from "@/components/ui/scroll-area";
-import { GoogleGenAI } from "@google/genai";
-
-const ai = new GoogleGenAI({ apiKey: process.env.GEMINI_API_KEY });
 
 interface Message {
   role: "user" | "assistant";
@@ -44,21 +41,25 @@ export const Chatbot: React.FC = () => {
     setIsLoading(true);
 
     try {
-      const response = await ai.models.generateContent({
-        model: "gemini-3-flash-preview",
-        contents: [
-          ...messages.map(msg => ({
-            role: msg.role === "assistant" ? "model" : "user",
-            parts: [{ text: msg.content }]
-          })),
-          { role: "user", parts: [{ text: input }] }
-        ],
-        config: {
-          systemInstruction: "You are a helpful legal document assistant for LexiGen AI. You help users understand legal terms, choose templates, and fill out forms. You do not provide actual legal advice but guide them through the LexiGen platform. Keep responses professional and concise."
-        }
+      // Map messages to Gemini history format
+      const history = messages.map(msg => ({
+        role: msg.role === "assistant" ? "model" : "user",
+        parts: [{ text: msg.content }]
+      }));
+
+      const response = await fetch("/api/chat", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ message: input, history }),
       });
 
-      const assistantMessage: Message = { role: "assistant", content: response.text || "I'm sorry, I couldn't process that request." };
+      if (!response.ok) {
+        const errorData = await response.json();
+        throw new Error(errorData.error || "Failed to process chat");
+      }
+
+      const data = await response.json();
+      const assistantMessage: Message = { role: "assistant", content: data.text || "I'm sorry, I couldn't process that request." };
       setMessages(prev => [...prev, assistantMessage]);
     } catch (error) {
       console.error("Chat error:", error);

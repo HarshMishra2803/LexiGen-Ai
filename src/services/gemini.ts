@@ -1,34 +1,23 @@
-import { GoogleGenAI } from "@google/genai";
-
-const ai = new GoogleGenAI({ apiKey: process.env.GEMINI_API_KEY });
-
 export async function generateLegalDocument(
   docType: string, 
   details: Record<string, string>,
   onChunk?: (chunk: string) => void,
   language: string = "English"
 ) {
-  const prompt = `
-    You are an expert legal counsel. Generate a professional, legally-binding ${docType} in ${language} based on the following details:
-    ${Object.entries(details).map(([key, value]) => `- ${key}: ${value}`).join("\n")}
-
-    Requirements:
-    1. Use professional legal terminology appropriate for ${language}.
-    2. Include standard clauses relevant to ${docType}.
-    3. Ensure the document is well-structured with clear headings and numbered sections.
-    4. Do not include any placeholder text like "[Insert Date Here]". Use the provided details or leave a clean blank line if a detail is missing but necessary.
-    5. The output should be in Markdown format for better readability.
-    6. Add a disclaimer at the end in ${language} stating that this is an AI-generated document and should be reviewed by a legal professional.
-    7. If the language is Hindi, use formal Hindi (Shuddh Hindi) appropriate for legal documents.
-  `;
-
   try {
-    const response = await ai.models.generateContent({
-      model: "gemini-3-flash-preview",
-      contents: prompt,
+    const response = await fetch("/api/generate-document", {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({ docType, details, language }),
     });
-    
-    const fullText = response.text || "";
+
+    if (!response.ok) {
+      const errorData = await response.json();
+      throw new Error(errorData.error || "Failed to generate document");
+    }
+
+    const data = await response.json();
+    const fullText = data.text || "";
 
     // Simulate streaming for UI if onChunk is provided
     if (onChunk) {
