@@ -44,7 +44,7 @@ async function startServer() {
     try {
       const result = await (genAI as any).models.generateContent({
         model: "gemini-3-flash-preview",
-        contents: [{ role: "user", parts: [{ text: prompt }] }]
+        contents: prompt
       });
       
       const text = result.text || "";
