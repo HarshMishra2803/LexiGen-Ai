@@ -1,0 +1,158 @@
+@import "tailwindcss";
+@import "tw-animate-css";
+@import "shadcn/tailwind.css";
+@import "@fontsource-variable/geist";
+
+@custom-variant dark (&:is(.dark *));
+
+@theme {
+  --font-sans: "Geist Variable", ui-sans-serif, system-ui, sans-serif;
+  --font-display: "Geist Variable", ui-sans-serif, system-ui, sans-serif;
+  --font-mono: "JetBrains Mono", ui-monospace, SFMono-Regular, monospace;
+  
+  --color-brand-green: #4ADE80;
+  --color-brand-green-dark: #22C55E;
+  --color-brand-cream: #FDFCF7;
+  
+  --color-background: var(--background);
+  --color-foreground: var(--foreground);
+  --color-card: var(--card);
+  --color-card-foreground: var(--card-foreground);
+  --color-popover: var(--popover);
+  --color-popover-foreground: var(--popover-foreground);
+  --color-primary: var(--primary);
+  --color-primary-foreground: var(--primary-foreground);
+  --color-secondary: var(--secondary);
+  --color-secondary-foreground: var(--secondary-foreground);
+  --color-muted: var(--muted);
+  --color-muted-foreground: var(--muted-foreground);
+  --color-accent: var(--accent);
+  --color-accent-foreground: var(--accent-foreground);
+  --color-destructive: var(--destructive);
+  --color-destructive-foreground: var(--destructive-foreground);
+  --color-border: var(--border);
+  --color-input: var(--input);
+  --color-ring: var(--ring);
+}
+
+:root {
+    --background: #FDFCF7;
+    --foreground: #1A1A1A;
+    --card: #FFFFFF;
+    --card-foreground: #1A1A1A;
+    --popover: #FFFFFF;
+    --popover-foreground: #1A1A1A;
+    --primary: #22C55E;
+    --primary-foreground: #FFFFFF;
+    --secondary: #F3F4F6;
+    --secondary-foreground: #1A1A1A;
+    --muted: #F3F4F6;
+    --muted-foreground: #6B7280;
+    --accent: #F3F4F6;
+    --accent-foreground: #1A1A1A;
+    --destructive: #EF4444;
+    --destructive-foreground: #FFFFFF;
+    --border: #E5E7EB;
+    --input: #E5E7EB;
+    --ring: #22C55E;
+    --radius: 1rem;
+}
+
+html {
+  scroll-behavior: smooth;
+}
+
+@layer base {
+  * {
+    @apply border-border outline-ring/50;
+  }
+  body {
+    @apply bg-background text-foreground antialiased;
+    /* Hide default cursor if we want a custom one, but maybe keep it for accessibility and only use custom for visual flair */
+    /* cursor: none; */
+  }
+}
+
+.custom-cursor {
+  width: 8px;
+  height: 8px;
+  background: var(--primary);
+  border-radius: 50%;
+  position: fixed;
+  pointer-events: none;
+  z-index: 9999;
+  transition: transform 0.1s ease-out;
+}
+
+.custom-cursor-follower {
+  width: 24px;
+  height: 24px;
+  border: 1px solid var(--primary);
+  border-radius: 50%;
+  position: fixed;
+  pointer-events: none;
+  z-index: 9998;
+  transition: transform 0.15s ease-out;
+}
+
+.markdown-body {
+  @apply text-slate-800 leading-relaxed;
+}
+
+.markdown-body h1 {
+  @apply text-3xl font-bold mb-6 mt-8 border-b pb-2;
+}
+
+.markdown-body h2 {
+  @apply text-2xl font-bold mb-4 mt-6;
+}
+
+.markdown-body p {
+  @apply mb-4;
+}
+
+.markdown-body ul {
+  @apply list-disc pl-6 mb-4;
+}
+
+.markdown-body ol {
+  @apply list-decimal pl-6 mb-4;
+}
+
+.markdown-body blockquote {
+  @apply border-l-4 border-slate-200 pl-4 italic my-4;
+}
+
+.marquee-container {
+  overflow: hidden;
+  white-space: nowrap;
+  position: relative;
+}
+
+.marquee-content {
+  display: inline-flex;
+  animation: marquee 30s linear infinite;
+}
+
+@keyframes marquee {
+  0% { transform: translateX(0); }
+  100% { transform: translateX(-50%); }
+}
+
+.soft-gradient {
+  background: radial-gradient(circle at 50% -20%, rgba(74, 222, 128, 0.25) 0%, transparent 60%),
+              radial-gradient(circle at 100% 100%, rgba(34, 197, 94, 0.1) 0%, transparent 50%),
+              radial-gradient(circle at 0% 50%, rgba(253, 252, 247, 1) 0%, transparent 100%);
+}
+
+.glass-card {
+  @apply bg-white/60 backdrop-blur-md border border-white/40 shadow-sm;
+}
+
+.pill-badge {
+  @apply px-3 py-1 rounded-full text-xs font-bold tracking-widest uppercase bg-white/80 border border-slate-200 shadow-sm;
+}
+
+.bg-grid-slate-200 {
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32' width='32' height='32' fill='none' stroke='rgb(226 232 240 / 0.4)'%3E%3Cpath d='M0 .5H31.5V32'/%3E%3C/svg%3E");
+}

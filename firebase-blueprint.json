@@ -1,0 +1,41 @@
+{
+  "entities": {
+    "user": {
+      "title": "User Profile",
+      "description": "Stores user profile information and preferences.",
+      "type": "object",
+      "properties": {
+        "uid": { "type": "string", "description": "Unique user ID from Firebase Auth" },
+        "email": { "type": "string", "format": "email", "description": "User's email address" },
+        "displayName": { "type": "string", "description": "User's display name" },
+        "photoURL": { "type": "string", "description": "User's profile picture URL" },
+        "createdAt": { "type": "string", "format": "date-time", "description": "When the user account was created" }
+      },
+      "required": ["uid", "email"]
+    },
+    "document": {
+      "title": "Generated Document",
+      "description": "Stores metadata and content of generated legal documents.",
+      "type": "object",
+      "properties": {
+        "userId": { "type": "string", "description": "ID of the user who generated the document" },
+        "type": { "type": "string", "description": "Type of document (e.g., NDA, Freelance Contract)" },
+        "title": { "type": "string", "description": "Title of the document" },
+        "content": { "type": "string", "description": "Markdown content of the generated document" },
+        "formData": { "type": "object", "description": "The form data used to generate the document" },
+        "createdAt": { "type": "string", "format": "date-time", "description": "When the document was generated" }
+      },
+      "required": ["userId", "type", "content", "createdAt"]
+    }
+  },
+  "firestore": {
+    "/users/{userId}": {
+      "schema": "user",
+      "description": "User profile documents"
+    },
+    "/users/{userId}/documents/{docId}": {
+      "schema": "document",
+      "description": "User's generated documents"
+    }
+  }
+}
